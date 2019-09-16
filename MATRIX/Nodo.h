@@ -5,6 +5,7 @@
 class Nodo {
 public:
 	Nodo();
+	Nodo(int);
 	void setValor(int);
 	int getValor();
 	void setSig(Nodo*);

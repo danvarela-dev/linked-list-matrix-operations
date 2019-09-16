@@ -12,22 +12,22 @@ public:
 	int getFilas();
 	int getColumnas();
 
-	Nodo * getNodo();
+	Nodo * getRoot_Nodo();
 
-	bool VerificarEscritura(char *);//F
-	int Filas(char *);// F
-	int Columnas(char *);// F
-
-	void CrearMatriz(char *); // F
-	void LLenarMatriz(char *); //F
-
-	void ImprimirMatriz(char *); // para Motivo de Prueba
- 	void SumaMatriz(Matriz, Matriz, char *,char *,char *);
-	void RestaMatriz(Matriz, Matriz, char *,char *,char *);
+	bool checkFormat(const char *);//Funciona
 	
-	void MultiplicacionMatriz(Matriz, Matriz, char *,char *,char *);
+	int Filas(const char *);// Funciona
+	int Columnas(const char *);// Funciona
 
-	void DeterminanteMatriz(Matriz,char *);
+	void CrearMatriz(const char *); // Funciona
+	void LLenarMatriz(const char *); // Funciona
+
+	void ImprimirMatriz(const char *); // para ver si se guarda
+ 	void SumaMatriz(Matriz, Matriz, const char *,const char *,const char *);//F
+	void RestaMatriz(Matriz, Matriz, const char *,const char *,const char *);
+	void MultiplicacionMatriz(Matriz, Matriz, const char *,const char *,const char *);
+
+	void DeterminanteMatriz(Matriz,const char *);
 
 private:
 	Nodo *inicio;
@@ -36,12 +36,4 @@ private:
 };
 
 
-//class MetodosMatrices {
-//public:
-//	static void añadirNodos(Nodo**);
-//	static void crearMatriz(Nodo**, int, int);
-//	static void ImprimirMatriz(Nodo**);
-//	static int ObtenerFilas(Nodo**);
-//	static int ObtenerColumnas(Nodo**);
-//};
 #endif // !MATRIZ_H

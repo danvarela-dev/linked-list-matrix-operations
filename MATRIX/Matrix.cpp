@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <fstream>
 #include "Matrix.h"
 
@@ -7,33 +8,43 @@ Matriz::Matriz() : f(0), c(0)
 {
 	inicio = new Nodo;
 }
-void Matriz::setFilas(int f) {
+void Matriz::setFilas(int f)
+{
 	this->f = f;
 }
-void Matriz::setColumnas(int c) {
+void Matriz::setColumnas(int c)
+{
 	this->c = c;
 }
-Nodo *Matriz::getNodo() {
+Nodo *Matriz::getRoot_Nodo()
+{
 	return this->inicio;
 }
-int Matriz::getFilas() {
+int Matriz::getFilas()
+{
 	return this->f;
 }
-int Matriz::getColumnas() {
+int Matriz::getColumnas()
+{
 	return this->c;
 }
 
-bool Matriz::VerificarEscritura(char *nombre) {
-	std::ifstream archivoM(nombre,std::ios::in);
-	if (!archivoM) {
+bool Matriz::checkFormat(const char *nombre)
+{
+
+	std::ifstream archivoM(nombre, std::ios::in);
+	if (!archivoM)
+	{
 		std::cout << "Error al abrir archivo";
 	}
 	std::string line;
-	
-	while (std::getline(archivoM, line)) {
-		for (int i = 0; i < line.length(); i=i+2) {
-			if (line[i] == ' ') {
 
+	while (std::getline(archivoM, line))
+	{
+		for (int i = 0; i < line.length(); i = i + 2)
+		{
+			if (line[i] == ' ')
+			{
 				archivoM.close();
 				return false;
 			}
@@ -42,30 +53,40 @@ bool Matriz::VerificarEscritura(char *nombre) {
 	archivoM.close();
 	return true;
 }
-int Matriz::Columnas(char * nombre) {
+
+int Matriz::Columnas(const char *nombre)
+{
 	std::ifstream archivoM(nombre, std::ios::in);
-	if (!archivoM) {
+	if (!archivoM)
+	{
 		std::cout << "Error al abrir archivo";
 	}
 	std::string line;
 	int i = 0;
-	while (std::getline(archivoM, line)) {
+	while (std::getline(archivoM, line))
+	{
 		i++;
 	}
+	//i = i-2;//reduce lo que se suma en Filas()
 	archivoM.close();
 	setColumnas(i);
 	return i;
-
 }
-int Matriz::Filas(char *nombre) {
+
+int Matriz::Filas(const char *nombre)
+{
 	std::ifstream archivoM(nombre, std::ios::in);
-	if (!archivoM) {
+	if (!archivoM)
+	{
 		std::cout << "Error al abrir archivo";
 	}
 	std::string line;
 	int a = 0;
-	while (std::getline(archivoM, line)) {
-		for (int i = 0; i < line.length(); i = i + 2) {
+
+	while (std::getline(archivoM, line))
+	{
+		for (int i = 0; i < line.length(); i = i + 2)
+		{
 			a++;
 		}
 		archivoM.close();
@@ -74,27 +95,35 @@ int Matriz::Filas(char *nombre) {
 	}
 }
 
-void Matriz::CrearMatriz(char *nombre) {
-	if (VerificarEscritura(nombre)) {
-		Nodo *nuevo;
-		Nodo *tmp = this->inicio;
+void Matriz::CrearMatriz(const char *nombre)
+{
 
+	if (checkFormat(nombre))
+	{
+
+		Nodo *nuevo;
+
+		Nodo *tmp = this->inicio;
 		Nodo *pivote = this->inicio;
 
 		int Col = Columnas(nombre);
 		int Fil = Filas(nombre);
 
-
-		for (int i = 0; i < Col; i++) {
-			if (i == 0) {}
-			else {
+		for (int i = 0; i < Col; i++)
+		{
+			if (i == 0)
+			{
+			}
+			else
+			{
 				pivote = tmp;
 				nuevo = new Nodo;
 				pivote->setAba(nuevo);
 				pivote = pivote->getAba();
 				tmp = tmp->getAba();
 			}
-			for (int k = 0; k < Fil; k++) {
+			for (int k = 0; k < Fil; k++)
+			{
 				nuevo = new Nodo;
 				pivote->setSig(nuevo);
 				pivote = pivote->getSig();
@@ -103,111 +132,153 @@ void Matriz::CrearMatriz(char *nombre) {
 	}
 	else
 	{
-		std::cout << "Error En escritura de la Matriz " << std::endl;
+		std::cout << "Error en crear de la Matriz " << std::endl;
 	}
 }
 
-void Matriz::LLenarMatriz(char *nombre) {
+void Matriz::LLenarMatriz(const char *nombre)
+{
 
-	
-
-	if (VerificarEscritura(nombre)) {
+	if (checkFormat(nombre))
+	{
+		
 		int Col = Columnas(nombre);
 		int Fil = Filas(nombre);
 
 		Nodo *tmp = this->inicio;
-		Nodo *pivote =this->inicio;
-		
+		Nodo *pivote = this->inicio;
 
 		std::ifstream archivoM(nombre, std::ios::in);
-		if (!archivoM) {
+		if (!archivoM)
+		{
 			std::cout << "Error al abrir archivo";
 		}
 		std::string line;
-		while (!archivoM.eof()) {
-			for (int i = 0; i < Col; i++) {
+		while (!archivoM.eof())
+		{
+			for (int i = 0; i < Col; i++)
+			{
 				std::getline(archivoM, line);
-				if (i == 0) {
-				//No realiza ninguna instruccion
-				}else {
+
+				if (i == 0)
+				{
+					//No realiza ninguna instruccion
+				}
+				else
+				{
 					pivote = tmp;
 					pivote = pivote->getAba();
 					tmp = tmp->getAba();
+				}
+				for (int k = 0; k < line.length(); k=k+2)
+				{
+					//const char *inf = &line[k];
+					//int info = atoi(inf); //convert str to int
+					char * cline = new char[line.length()+1];
+					strcpy(cline,line.c_str());
+					char * charInt = strtok(cline," ");
+				//	int numeroSacado = atoi(charInt);
+					
+					while (charInt && pivote->getSig()!=0)
+					{
+						pivote->setValor(atoi(charInt));
+						pivote = pivote->getSig();
+						charInt =strtok(NULL," ");
+					
+					
+					}
+						
+
+					//pivote->setValor(numeroSacado);
 					
 				}
-				for (int k = 0; k < line.length(); k=k+2) {
-					const char * inf = &line[k];
-					int info = atoi(inf);
+			}
+		}
+	}
+	else
+	{
+		std::cout << "Formato de la matriz incorrecto" << std::endl;
+	}
+}
 
-					pivote->setValor(info);
+void Matriz::ImprimirMatriz(const char *nombre)
+{
+
+	if (inicio == 0)
+	{
+		std::cout << "EMPTY LIST";
+		return;
+	}
+	else
+	{
+
+		if (checkFormat(nombre))
+		{
+			//	std::cout << "EMPTY LIST";
+			Nodo *tmp = inicio;
+			Nodo *pivote = inicio;
+
+			int Col = Columnas(nombre);
+			int Fil = Filas(nombre);
+
+			for (int i = 0; i < Col; i++)
+			{
+				if (i == 0)
+				{
+				}
+				else
+				{
+					pivote = tmp;
+					pivote = pivote->getAba();
+					tmp = tmp->getAba();
+					std::cout << "\n";
+				}
+				for (int k = 0; k < Fil; k++)
+				{
+
+					std::cout << pivote->getValor() << " ";
 					pivote = pivote->getSig();
 				}
 			}
 		}
-
-	}
-	else
-	{
-		std::cout << "Error En escritura de la Matriz " << std::endl;
-	}
-}
-
-void Matriz::ImprimirMatriz(char *nombre) { 
-	if (VerificarEscritura(nombre)) {
-		
-		Nodo *tmp = inicio;
-
-		Nodo *pivote = inicio;
-
-		int Col = Columnas(nombre);
-		int Fil = Filas(nombre);
-
-
-		for (int i = 0; i < Col; i++) {
-			if (i == 0) {}
-			else {
-				pivote = tmp;
-				pivote = pivote->getAba();
-				tmp = tmp->getAba();
-				std::cout << "\n";
-			}
-			for (int k = 0; k < Fil; k++) {
-				
-				std::cout << pivote->getValor()<<"\t";
-				pivote = pivote->getSig();
-			}
+		else
+		{
+			std::cout << "Error En escritura de la Matriz " << std::endl;
 		}
 	}
-	else
-	{
-		std::cout << "Error En escritura de la Matriz " << std::endl;
-	}
 }
 
- void Matriz::SumaMatriz(Matriz A, Matriz B,char *nombreA,char *nombreB,char *nombre) {
-	if (VerificarEscritura(nombreA)&&VerificarEscritura(nombreB)) {
-		if (Columnas(nombreA) == Columnas(nombreB) && Filas(nombreA) == Filas(nombreB)) {
+void Matriz::SumaMatriz(Matriz A, Matriz B, const char *nombreA, const char *nombreB, const char *nombre)
+{
+	if (checkFormat(nombreA) && checkFormat(nombreB))
+	{
+		if (Columnas(nombreA) == Columnas(nombreB) && Filas(nombreA) == Filas(nombreB))
+		{
 
 			int Col = Columnas(nombreA); // no importa cual archivo debido que ya paso la condicion
 			int Fil = Filas(nombreA);	// y presentan as misma dimensiones
-			
-			Nodo *pivote1 = A.getNodo();
-			Nodo *tmp1 = A.getNodo();
 
-			Nodo *pivote2 = B.getNodo();
-			Nodo *tmp2 = B.getNodo();
+			Nodo *pivote1 = A.getRoot_Nodo();
+			Nodo *tmp1 = A.getRoot_Nodo();
+
+			Nodo *pivote2 = B.getRoot_Nodo();
+			Nodo *tmp2 = B.getRoot_Nodo();
 
 			std::ofstream archivoM(nombre);
 			archivoM.clear();
-			if (!archivoM) {
+			if (!archivoM)
+			{
 				std::cout << "Error al abrir archivo";
 			}
-			std::string linea="";
+			std::string linea = "";
 			int suma;
-			
-			for (int i = 0; i < Col; i++) {
-				if(i==0){
-					for (int k = 0; k < Fil; k++) {
+
+			for (int i = 0; i < Col; i++)
+			{
+				if (i == 0)
+				{
+					for (int k = 0; k < Fil; k++)
+					{
 
 						suma = pivote1->getValor() + pivote2->getValor();
 						pivote1 = pivote1->getSig();
@@ -226,10 +297,11 @@ void Matriz::ImprimirMatriz(char *nombre) {
 					pivote2 = pivote2->getAba();
 					tmp2 = tmp2->getAba();
 					linea = "";
-					
 				}
-				else {
-					for (int k = 0; k < Fil; k++) {
+				else
+				{
+					for (int k = 0; k < Fil; k++)
+					{
 
 						suma = pivote1->getValor() + pivote2->getValor();
 						pivote1 = pivote1->getSig();
@@ -248,285 +320,302 @@ void Matriz::ImprimirMatriz(char *nombre) {
 					pivote2 = pivote2->getAba();
 					tmp2 = tmp2->getAba();
 					linea = "";
-					
 				}
-				
 			}
 
 			archivoM.close();
-
-
 		}
-		else {
+		else
+		{
 			std::cout << "No se puede sumar debido a que deben ser de la misma dimension" << std::endl;
 		}
 	}
-	else {
-		std::cout << "Error en la escritura de alguno de los archivos"<<std::endl;
+	else
+	{
+		std::cout << "Error en la escritura de alguno de los archivos" << std::endl;
 	}
 }
 
- void Matriz::RestaMatriz(Matriz A, Matriz B, char *nombreA, char *nombreB, char *nombre) {
-	 if (VerificarEscritura(nombreA) && VerificarEscritura(nombreB)) {
-		 if (Columnas(nombreA) == Columnas(nombreB) && Filas(nombreA) == Filas(nombreB)) {
+void Matriz::RestaMatriz(Matriz A, Matriz B, const char *nombreA, const char *nombreB, const char *nombre)
+{
+	if (checkFormat(nombreA) && checkFormat(nombreB))
+	{
+		if (Columnas(nombreA) == Columnas(nombreB) && Filas(nombreA) == Filas(nombreB))
+		{
 
-			 int Col = Columnas(nombreA); // no importa cual archivo debido que ya paso la condicion
-			 int Fil = Filas(nombreA);	// y presentan as misma dimensiones
+			int Col = Columnas(nombreA); // no importa cual archivo debido que ya paso la condicion
+			int Fil = Filas(nombreA);	// y presentan as misma dimensiones
 
-			 Nodo *pivote1 = A.getNodo();
-			 Nodo *tmp1 = A.getNodo();
+			Nodo *pivote1 = A.getRoot_Nodo();
+			Nodo *tmp1 = A.getRoot_Nodo();
 
-			 Nodo *pivote2 = B.getNodo();
-			 Nodo *tmp2 = B.getNodo();
+			Nodo *pivote2 = B.getRoot_Nodo();
+			Nodo *tmp2 = B.getRoot_Nodo();
 
-			 std::ofstream archivoM(nombre);
-			 archivoM.clear();
-			 if (!archivoM) {
-				 std::cout << "Error al abrir archivo";
-			 }
-			 std::string linea = "";
-			 int resta;
+			std::ofstream archivoM(nombre);
+			archivoM.clear();
+			if (!archivoM)
+			{
+				std::cout << "Error al abrir archivo";
+			}
+			std::string linea = "";
+			int resta;
 
-			 for (int i = 0; i < Col; i++) {
-				 if (i == 0) {
-					 for (int k = 0; k < Fil; k++) {
+			for (int i = 0; i < Col; i++)
+			{
+				if (i == 0)
+				{
+					for (int k = 0; k < Fil; k++)
+					{
 
-						 resta = pivote2->getValor() - pivote1->getValor();
-						 pivote1 = pivote1->getSig();
-						 pivote2 = pivote2->getSig();
+						resta = pivote2->getValor() - pivote1->getValor();
+						resta= resta *(-1);
+						pivote1 = pivote1->getSig();
+						pivote2 = pivote2->getSig();
 
-						 linea = linea + std::to_string(resta) + ' ';
-						 resta = 0;
-					 }
-					 archivoM << linea + "\n";
-					 pivote1 = tmp1;
-					 pivote2 = tmp2;
+						linea = linea + std::to_string(resta) + ' ';
+						resta = 0;
+					}
+					archivoM << linea + "\n";
+					pivote1 = tmp1;
+					pivote2 = tmp2;
 
-					 pivote1 = pivote1->getAba();
-					 tmp1 = tmp1->getAba();
+					pivote1 = pivote1->getAba();
+					tmp1 = tmp1->getAba();
 
-					 pivote2 = pivote2->getAba();
-					 tmp2 = tmp2->getAba();
-					 linea = "";
+					pivote2 = pivote2->getAba();
+					tmp2 = tmp2->getAba();
+					linea = "";
+				}
+				else
+				{
+					for (int k = 0; k < Fil; k++)
+					{
 
-				 }
-				 else {
-					 for (int k = 0; k < Fil; k++) {
+						resta = pivote2->getValor() - pivote1->getValor();
+						resta = resta * (-1);
+						pivote1 = pivote1->getSig();
+						pivote2 = pivote2->getSig();
 
-						 resta = pivote2->getValor() - pivote1->getValor();
-						 pivote1 = pivote1->getSig();
-						 pivote2 = pivote2->getSig();
+						linea = linea + std::to_string(resta) + ' ';
+						resta = 0;
+					}
+					archivoM << linea + "\n";
+					pivote1 = tmp1;
+					pivote2 = tmp2;
 
-						 linea = linea + std::to_string(resta) + ' ';
-						 resta = 0;
-					 }
-					 archivoM << linea + "\n";
-					 pivote1 = tmp1;
-					 pivote2 = tmp2;
+					pivote1 = pivote1->getAba();
+					tmp1 = tmp1->getAba();
 
-					 pivote1 = pivote1->getAba();
-					 tmp1 = tmp1->getAba();
+					pivote2 = pivote2->getAba();
+					tmp2 = tmp2->getAba();
+					linea = "";
+				}
+			}
 
-					 pivote2 = pivote2->getAba();
-					 tmp2 = tmp2->getAba();
-					 linea = "";
+			archivoM.close();
+		}
+		else
+		{
+			std::cout << "No se puede sumar debido a que deben ser de la misma dimension" << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Error en la escritura de alguno de los archivos" << std::endl;
+	}
+}
 
-				 }
+void Matriz::MultiplicacionMatriz(Matriz A, Matriz B, const char *nombreA, const char *nombreB, const char *nombre)
+{
+	if (checkFormat(nombreA) && checkFormat(nombreB))
+	{
+		if (Filas(nombreB) == Columnas(nombreA))
+		{
 
-			 }
+			int Col = Columnas(nombreA);
+			int Fil = Filas(nombreB);
+			int contador = 0;
 
-			 archivoM.close();
+			Nodo *pivote1 = A.getRoot_Nodo();
+			Nodo *tmp1 = A.getRoot_Nodo();
 
+			Nodo *pivote2 = B.getRoot_Nodo();
+			Nodo *tmp2 = B.getRoot_Nodo();
 
-		 }
-		 else {
-			 std::cout << "No se puede sumar debido a que deben ser de la misma dimension" << std::endl;
-		 }
-	 }
-	 else {
-		 std::cout << "Error en la escritura de alguno de los archivos" << std::endl;
-	 }
- }
+			std::ofstream archivoM(nombre);
+			archivoM.clear();
+			if (!archivoM)
+			{
+				std::cout << "Error al abrir archivo";
+			}
+			std::string linea = "";
+			int multiplicacion = 0;
 
- void Matriz::MultiplicacionMatriz(Matriz A, Matriz B, char *nombreA, char *nombreB, char *nombre) {
-	 if (VerificarEscritura(nombreA) && VerificarEscritura(nombreB)) {
-		 if (Filas(nombreB) == Columnas(nombreA)) {
+			for (int i = 0; i < Col; i++)
+			{
+				if (i == 0)
+				{
+					for (int k = 0; k < Fil * 2; k++)
+					{
+						if (contador == Fil)
+						{
+							linea = linea + std::to_string(multiplicacion) + ' ';
 
-			 int Col = Columnas(nombreA);
-			 int Fil = Filas(nombreB);
-			 int contador = 0;
+							pivote1 = tmp1;
+							pivote2 = tmp2;
 
-			 Nodo *pivote1 = A.getNodo();
-			 Nodo *tmp1 = A.getNodo();
+							pivote2 = pivote2->getSig();
+						}
+						else
+						{
+							multiplicacion = multiplicacion + (pivote1->getValor() * pivote2->getValor());
+							pivote1 = pivote1->getSig();
+							pivote2 = pivote2->getAba();
 
-			 Nodo *pivote2 = B.getNodo();
-			 Nodo *tmp2 = B.getNodo();
+							contador++;
+						}
+					}
+					archivoM << linea + "\n";
+					linea = "";
+					contador = 0;
+					pivote1 = tmp1;
+					pivote2 = tmp2;
 
-			 std::ofstream archivoM(nombre);
-			 archivoM.clear();
-			 if (!archivoM) {
-				 std::cout << "Error al abrir archivo";
-			 }
-			 std::string linea = "";
-			 int multiplicacion=0;
+					pivote1 = pivote1->getAba();
+				}
+				else
+				{
+					multiplicacion = 0;
+					for (int k = 0; k < Fil * 2; k++)
+					{
 
-			 for (int i = 0; i < Col; i++) {
-				 if (i == 0) {
-					 for (int k = 0; k < Fil*2; k++) {
-						 if (contador == Fil) {
-							 linea = linea + std::to_string(multiplicacion) + ' ';
-							
-							 pivote1 = tmp1;
-							 pivote2 = tmp2;
+						if (contador == Fil)
+						{
 
-							
-							 pivote2 = pivote2->getSig();
+							linea = linea + std::to_string(multiplicacion) + ' ';
 
-						 }
-						 else
-						 {
-							 multiplicacion = multiplicacion + (pivote1->getValor()*pivote2->getValor());
-							 pivote1 = pivote1->getSig();
-							 pivote2 = pivote2->getAba();
-							 
-							 contador++;
-						 }
-						 
-					 }
-					 archivoM << linea + "\n";
-					 linea = "";
-					 contador = 0;
-					 pivote1 = tmp1;
-					 pivote2 = tmp2;
+							pivote1 = tmp1;
+							pivote2 = tmp2;
 
-					 pivote1 = pivote1->getAba();
+							pivote2 = pivote2->getSig();
+						}
+						else
+						{
+							multiplicacion = multiplicacion + (pivote1->getValor() * pivote2->getValor());
+							pivote1 = pivote1->getSig();
+							pivote2 = pivote2->getAba();
 
-				 }
-				 else {
-					 multiplicacion = 0;
-					 for (int k = 0; k < Fil * 2; k++) {
-						 
-						 if (contador == Fil) {
-							 
-							 linea = linea + std::to_string(multiplicacion) + ' ';
-							 
-							 pivote1 = tmp1;
-							 pivote2 = tmp2;
+							contador++;
+						}
+					}
+					archivoM << linea + "\n";
+					linea = "";
+					contador = 0;
+					pivote1 = tmp1;
+					pivote2 = tmp2;
 
-							 
-							 pivote2 = pivote2->getSig();
+					pivote1 = pivote1->getAba();
+				}
+			}
 
-						 }
-						 else
-						 {
-							 multiplicacion = multiplicacion + (pivote1->getValor()*pivote2->getValor());
-							 pivote1 = pivote1->getSig();
-							 pivote2 = pivote2->getAba();
-							 
-							 contador++;
-						 }
+			archivoM.close();
+		}
+		else
+		{
+			std::cout << "No se pueden multiplicar ya que debe tener La matriz B el en columnas el mismo numero de fila de la matriz A para la multiplicacion" << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Error en la escritura de alguno de los archivos" << std::endl;
+	}
+}
 
-					 }
-					 archivoM << linea + "\n";
-					 linea = "";
-					 contador = 0;
-					 pivote1 = tmp1;
-					 pivote2 = tmp2;
+void Matriz::DeterminanteMatriz(Matriz matriz, const char *nombre)
+{
+	if (matriz.getFilas() == 1 && matriz.getColumnas() == 1)
+	{
+		std::ofstream archivoM(nombre);
+		archivoM.clear();
+		if (!archivoM)
+		{
+			std::cout << "Error al abrir archivo";
+		}
+		archivoM << "Determinante: " << matriz.getRoot_Nodo()->getValor();
+		archivoM.close();
+	}
+	else if (matriz.getFilas() == 2 && matriz.getColumnas() == 2)
+	{
+		std::ofstream archivoM(nombre);
+		archivoM.clear();
+		if (!archivoM)
+		{
+			std::cout << "Error al abrir archivo";
+		}
+		Nodo *n1 = matriz.getRoot_Nodo();
+		Nodo *n2 = matriz.getRoot_Nodo()->getAba();
+		Nodo *n3 = matriz.getRoot_Nodo()->getSig();
+		Nodo *n4 = matriz.getRoot_Nodo()->getAba();
 
-					 pivote1 = pivote1->getAba();
-				 }
+		int multiplicacion = (n1->getValor() * n2->getSig()->getValor() - n3->getValor() * n4->getValor());
 
+		archivoM << "Determinante: " << multiplicacion;
+		archivoM.close();
+	}
+	else if (matriz.getFilas() == 3 && matriz.getColumnas() == 3)
+	{ // por cofactores
 
-			 }
+		std::ofstream archivoM(nombre);
+		archivoM.clear();
+		if (!archivoM)
+		{
+			std::cout << "Error al abrir archivo";
+		}
 
-			 archivoM.close();
-		 }
-		 else {
-		 std::cout<< "No se pueden multiplicar ya que debe tener La matriz B el en columnas el mismo numero de fila de la matriz A para la multiplicacion" << std::endl;
-		 }
-	 }
-	 else {
-		 std::cout << "Error en la escritura de alguno de los archivos" << std::endl;
-	 }
- }
+		int total = 0;
 
- void Matriz::DeterminanteMatriz(Matriz matriz,char *nombre) {
-	 if (matriz.getFilas() == 1 && matriz.getColumnas() == 1) {
-		 std::ofstream archivoM(nombre);
-		 archivoM.clear();
-		 if (!archivoM) {
-			 std::cout << "Error al abrir archivo";
-		 }
-		 archivoM << "Determinante: " << matriz.getNodo()->getValor();
-		 archivoM.close();
-	 }
-	 else if (matriz.getFilas() == 2 && matriz.getColumnas() == 2) {
-		 std::ofstream archivoM(nombre);
-		 archivoM.clear();
-		 if (!archivoM) {
-			 std::cout << "Error al abrir archivo";
-		 }
-		 Nodo *n1 = matriz.getNodo();
-		 Nodo *n2 = matriz.getNodo()->getAba();
-		 Nodo *n3 = matriz.getNodo()->getSig();
-		 Nodo *n4 = matriz.getNodo()->getAba();
+		for (int i = 0; i < 2; i++)
+		{
+			if (i = 0)
+			{
+				Nodo *nprin = matriz.getRoot_Nodo();
+				Nodo *n2 = matriz.getRoot_Nodo()->getAba()->getSig();
+				Nodo *n3 = n2->getSig();
+				Nodo *n4 = matriz.getRoot_Nodo()->getAba()->getAba()->getSig();
+				Nodo *n5 = n4->getSig();
 
-		 int multiplicacion = (n1->getValor() * n2->getSig()->getValor() - n3->getValor()*n4->getValor());
-		 
-		 archivoM << "Determinante: " << multiplicacion;
-		 archivoM.close();
-	 }
-	 else if (matriz.getFilas() == 3 && matriz.getColumnas() == 3) { // por cofactores
+				total = total + (nprin->getValor() * (n2->getValor() * n5->getValor() - n3->getValor() * n4->getValor()));
+			}
+			else if (i = 1)
+			{
+				Nodo *nprin = matriz.getRoot_Nodo()->getSig();
+				Nodo *n2 = matriz.getRoot_Nodo()->getAba();
+				Nodo *n3 = n2->getSig()->getSig();
+				Nodo *n4 = n2->getAba();
+				Nodo *n5 = n4->getSig()->getSig();
 
-		 std::ofstream archivoM(nombre);
-		 archivoM.clear();
-		 if (!archivoM) {
-			 std::cout << "Error al abrir archivo";
-		 }
-		 
-		 int total=0;
+				total = total - (nprin->getValor() * (n2->getValor() * n5->getValor() - n3->getValor() * n4->getValor()));
+			}
+			else
+			{
+				Nodo *nprin = matriz.getRoot_Nodo()->getSig()->getSig();
+				Nodo *n2 = matriz.getRoot_Nodo()->getAba();
+				Nodo *n3 = n2->getSig();
+				Nodo *n4 = n2->getAba();
+				Nodo *n5 = n4->getSig();
 
-		 for (int i = 0; i < 2; i++) {
-			 if (i = 0) {
-				 Nodo *nprin = matriz.getNodo();
-				 Nodo *n2 = matriz.getNodo()->getAba()->getSig();
-				 Nodo *n3 = n2->getSig();
-				 Nodo *n4 = matriz.getNodo()->getAba()->getAba()->getSig();
-				 Nodo *n5 = n4->getSig();
-
-				 total = total + (nprin->getValor()* (n2->getValor()*n5->getValor() - n3->getValor()*n4->getValor()));
-			 }
-			 else if (i = 1) {
-				 Nodo *nprin = matriz.getNodo()->getSig();
-				 Nodo *n2 = matriz.getNodo()->getAba();
-				 Nodo *n3 = n2->getSig()->getSig();
-				 Nodo *n4 = n2->getAba();
-				 Nodo *n5 = n4->getSig()->getSig();
-
-				 total = total - (nprin->getValor()* (n2->getValor()*n5->getValor() - n3->getValor()*n4->getValor()));
-				
-			 }
-			 else
-			 {
-				 Nodo *nprin = matriz.getNodo()->getSig()->getSig();
-				 Nodo *n2 = matriz.getNodo()->getAba();
-				 Nodo *n3 = n2->getSig();
-				 Nodo *n4 = n2->getAba();
-				 Nodo *n5 = n4->getSig();
-
-				 total = total + (nprin->getValor()* (n2->getValor()*n5->getValor() - n3->getValor()*n4->getValor()));
-			 }
-		 }
-		 archivoM << "Determinante: " << total;
-		 archivoM.close();
-		 
-
-	 }
-	 else
-	 {
-		 std::cout << "No aplica este caso para el proyecto en matrices de orden 4" << std::endl;
-	 }
- }
+				total = total + (nprin->getValor() * (n2->getValor() * n5->getValor() - n3->getValor() * n4->getValor()));
+			}
+		}
+		archivoM << "Determinante: " << total;
+		archivoM.close();
+	}
+	else
+	{
+		std::cout << "No aplica este caso para el proyecto en matrices de orden 4" << std::endl;
+	}
+}
 
 //void MetodosMatrices::añadirNodos(Nodo**){
 //}

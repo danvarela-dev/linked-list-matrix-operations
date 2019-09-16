@@ -1,13 +1,15 @@
-#include "Nodo.h"
+#include "Matrix.h"
 
 Nodo::Nodo() :valor(-1), sig(0), aba(0)
 {}
+Nodo::Nodo(int num):valor(num){}
 
 void Nodo::setValor(int Valor) {
 	this->valor = Valor;
 }
 
-int Nodo::getValor() {
+int Nodo::getValor() 
+{
 	return this->valor;
 }
 
